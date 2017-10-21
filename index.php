@@ -42,7 +42,8 @@ if (isset($_SESSION['status']) && $_SESSION['status'] == 'verified' && !empty($_
 //    exit;
     //Get latest tweets
     $myTweets = $twClient->get('statuses/user_timeline', array('screen_name' => $username, 'count' => 5));
-//Display username and logout link
+    //Display profile iamge and tweet form
+    //Display username and logout link
     $output_user_detail .= '<div class="col-md-7 user-details">';
     $output_user_detail .= '<div class="row coralbg white">';
     $output_user_detail .= '<div class="col-md-2 no-pad"><div class="user-image"><img src="' . $userData['profile_image_url'] . '" class="img-responsive thumbnail"></div></div>';
@@ -59,26 +60,19 @@ if (isset($_SESSION['status']) && $_SESSION['status'] == 'verified' && !empty($_
     $output_user_detail .= '<h3>TOTAL TWEETS</h3>';
     $output_user_detail .= ' <h4>' . $userData['statuses_count'] . '</h4>';
     $output_user_detail .= '</div></div></div>';
-    $output .= '<div class="welcome_txt">Welcome <strong>' . $username . '</strong> (Twitter ID : ' . $twitterId . '). <a href="logout.php">Logout</a>!</div>';
-    $login_logout = '<a href="logout.php" class="btn btn-xl btn-twitter">Logut(' . $username . ')</a>';
-//Display profile iamge and tweet form
-    $output .= '<div class="tweet_box">';
-    $output .= '<img src="' . $profilePicture . '" width="120" height="110"/>';
-    $output .= '<form method="post" action=""><table width="200" border="0" cellpadding="3">';
-    $output .= '<tr>';
-    $output .= '<td><textarea name="updateme" cols="60" rows="4"></textarea></td>';
-    $output .= '</tr>';
-    $output .= '<tr>';
-    $output .= '<td><input type="submit" value="Tweet" /></td>';
-    $output .= '</tr></table></form>';
-    $output .= '</div>';
-//Display the latest tweets
-    $output .= '<div class="tweet_list"><strong>Latest Tweets : </strong>';
-    $output .= '<ul>';
+    $output_user_detail .= '<div class="col-md-5">';
+    $output_user_detail .= '<div class="row user-pad text-center"><h4>TOP TWEETS<h4></div>';
+    $output_user_detail .= '<div class="row overview">';
+    $output_user_detail .= '<div id="wowslider-container1"><div class="ws_images"><ul>';
     foreach ($myTweets as $tweet) {
-        $output .= '<li>' . $tweet['text'] . ' <br />-<i>' . $tweet['created_at'] . '</i></li>';
+//        echo '<pre>';
+//        print_r($tweet);profile_banner_url
+        $output_user_detail .= '<li><img class="row coralbg white"  src="' . $tweet['user']['profile_banner_url'] . '" alt="' . $tweet['text'] . '" title="' . $tweet['text'] . '"/>' . $tweet['created_at'] . '</li>';
     }
-    $output .= '</ul></div>';
+    $output_user_detail .= '</ul></div></div>';
+    $output_user_detail .= '</div></div>';
+
+    $login_logout = '<a href="logout.php" class="btn btn-xl btn-twitter">Logut(' . $username . ')</a>';
 } elseif (isset($_REQUEST['oauth_token']) && $_SESSION['token'] == $_REQUEST['oauth_token']) {
 //Call Twitter API
     $twClient = new TwitterOAuth($consumerKey, $consumerSecret, $_SESSION['token'], $_SESSION['token_secret']);
@@ -161,7 +155,7 @@ if (isset($_SESSION['status']) && $_SESSION['status'] == 'verified' && !empty($_
         <meta name="author" content="">
         <title>tweeter-login</title>
         <!-- Bootstrap core CSS -->
-        <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/bootstrap.min.css" rel="stylesheet">
         <!-- Custom styles for this template -->
         <link href="css/scrolling-nav.css" rel="stylesheet">
         <link href="css/style.css" rel="stylesheet">
@@ -169,6 +163,9 @@ if (isset($_SESSION['status']) && $_SESSION['status'] == 'verified' && !empty($_
         <link href="css/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
         <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
         <link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+        <!-- Start WOWSlider.com HEAD section -->
+        <script type="text/javascript" src="js/jquery.js"></script>
+        <!-- End WOWSlider.com HEAD section -->
     </head>
     <body id="page-top">
         <!-- Navigation -->
@@ -187,7 +184,7 @@ if (isset($_SESSION['status']) && $_SESSION['status'] == 'verified' && !empty($_
                 </div>
             </div>
         </nav>
-        <section>
+        <section style="min-height: 450px;">
             <div class="container">
                 <div class="row">
                     <div class="col-md-12 mx-auto">
@@ -202,25 +199,9 @@ if (isset($_SESSION['status']) && $_SESSION['status'] == 'verified' && !empty($_
                     </div>
                 </div>
             </div>
-            <!--            <div class="container">
-                            <div class="row">
-                                <div class="col-lg-8 mx-auto">
-            <?php
-//                        echo $output;
-            ?>
-                                </div>
-                            </div>
-                        </div>-->
             <div class="container">
                 <div class="row user-menu-container square">
                     <?php echo $output_user_detail ?>
-                    <!--                    <div class="col-md-4 user-menu user-pad">
-                                            <div class="user-menu-content active">
-                                                <h3>
-                                                    Latest Tweets 
-                                                </h3>
-                                            </div>
-                                        </div>-->
                 </div>
             </div>
         </section>
@@ -232,12 +213,9 @@ if (isset($_SESSION['status']) && $_SESSION['status'] == 'verified' && !empty($_
             <!-- /.container -->
         </footer>
         <!-- Bootstrap core JavaScript -->
-        <script src="vendor/jquery/jquery.min.js"></script>
-        <script src="vendor/popper/popper.min.js"></script>
-        <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-        <!-- Plugin JavaScript -->
-        <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-        <!-- Custom JavaScript for this theme -->
+        <script src="js/bootstrap.min.js"></script>
         <script src="js/scrolling-nav.js"></script>
+        <script type="text/javascript" src="js/wowslider.js"></script>
+        <script type="text/javascript" src="js/script.js"></script>
     </body>
 </html>

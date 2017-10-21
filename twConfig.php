@@ -5,7 +5,7 @@ if (!session_id()) {
 }
 
 //Include Twitter client library 
-include_once 'src/twitteroauth.php';
+include_once 'lib/twitteroauth.php';
 
 /*
  * Configuration and setup Twitter API
