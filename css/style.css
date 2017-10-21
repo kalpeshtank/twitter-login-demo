@@ -64,8 +64,8 @@ div.user-menu-container a, div.user-menu-container .btn  {
 }
 
 div.user-menu-container .thumbnail {
-    width:100%;
-    min-height:200px;
+    min-width:75px;
+    min-height:50px;
     border: 0px!important;
     padding: 0px;
     border-radius: 0;
@@ -151,7 +151,7 @@ div.user-menu div.user-menu-content:not(.active){
 
 .user-details {
     background: #eee;
-    min-height: 333px;
+    min-height: 200px;
 }
 
 .user-image {

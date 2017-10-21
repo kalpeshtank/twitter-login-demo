@@ -20,9 +20,6 @@ $output = '';
 $output_user_detail = '';
 if (isset($_SESSION['status']) && $_SESSION['status'] == 'verified' && !empty($_SESSION['request_vars'])) {
 //Retrive variables from session
-//    echo '<pre>';
-//    print_r($_SESSION);
-//    exit;
     $username = $_SESSION['request_vars']['screen_name'];
     $twitterId = $_SESSION['request_vars']['user_id'];
     $oauthToken = $_SESSION['request_vars']['oauth_token'];
@@ -38,34 +35,29 @@ if (isset($_SESSION['status']) && $_SESSION['status'] == 'verified' && !empty($_
     if (isset($_POST["updateme"])) {
         $my_update = $twClient->post('statuses/update', array('status' => $_POST["updateme"]));
     }
-    $myfollwer_data = $twClient->get('followers/ids', array('screen_name' => $username));
-    $myfollwing_data = $twClient->get('friends/ids', array('screen_name' => $username));
-    //Get latest tweets
-    $myTweets = $twClient->get('statuses/user_timeline', array('screen_name' => $username, 'count' => 5));
-    $totalTwittes = $twClient->get('statuses/user_timeline', array('screen_name' => $username));
-    
-    $userData = $twClient->get('users/show', array('screen_name' => $username));
+    $twitter_user_data = $twClient->get('users/lookup', array('screen_name' => $username));
+    $userData = $twitter_user_data[0];
 //    echo '<pre>';
 //    print_r($userData);
 //    exit;
+    //Get latest tweets
+    $myTweets = $twClient->get('statuses/user_timeline', array('screen_name' => $username, 'count' => 5));
 //Display username and logout link
     $output_user_detail .= '<div class="col-md-7 user-details">';
     $output_user_detail .= '<div class="row coralbg white">';
-    $output_user_detail .= '<div class="col-md-6 no-pad">';
-    $output_user_detail .= '<div class="user-pad">';
-    $output_user_detail .= '<h3 class="welcome_txt">Welcome back, <strong>' . $userData['name'] . '</strong></h3>';
-    $output_user_detail .= '<h4 class="white"><i class="fa fa-twitter"></i>(Twitter ID : ' . $twitterId . ').</div></div><div class="col-md-6 no-pad">';
-    $output_user_detail .= '<div class="user-image"><img src="' . $profilePicture . '" class="img-responsive thumbnail"></div>';
-    $output_user_detail .= '</div></div><div class="row overview">';
+    $output_user_detail .= '<div class="col-md-2 no-pad"><div class="user-image"><img src="' . $userData['profile_image_url'] . '" class="img-responsive thumbnail"></div></div>';
+    $output_user_detail .= '<div class="col-md-10 no-pad"><div class="user-pad"><h3 class="welcome_txt">Welcome back, <strong>' . $userData['name'] . '</strong></h3>';
+    $output_user_detail .= '<h4 class="white"><i class="fa fa-twitter"></i>(Twitter ID : ' . $twitterId . ').</div></div>';
+    $output_user_detail .= '</div><div class="row overview">';
     $output_user_detail .= '<div class="col-md-4 user-pad text-center">';
     $output_user_detail .= '<h3>FOLLOWERS</h3>';
-    $output_user_detail .= '<h4>' . count($myfollwer_data['ids']) . '</h4></div>';
+    $output_user_detail .= '<h4>' . $userData['followers_count'] . '</h4></div>';
     $output_user_detail .= '<div class="col-md-3 user-pad text-center">';
     $output_user_detail .= ' <h3>FOLLOWING</h3>';
-    $output_user_detail .= '<h4>' . count($myfollwing_data['ids']) . '</h4></div>';
+    $output_user_detail .= '<h4>' . $userData['friends_count'] . '</h4></div>';
     $output_user_detail .= '<div class="col-md-5 user-pad text-center">';
     $output_user_detail .= '<h3>TOTAL TWEETS</h3>';
-    $output_user_detail .= ' <h4>' . count($totalTwittes) . '</h4>';
+    $output_user_detail .= ' <h4>' . $userData['statuses_count'] . '</h4>';
     $output_user_detail .= '</div></div></div>';
     $output .= '<div class="welcome_txt">Welcome <strong>' . $username . '</strong> (Twitter ID : ' . $twitterId . '). <a href="logout.php">Logout</a>!</div>';
     $login_logout = '<a href="logout.php" class="btn btn-xl btn-twitter">Logut(' . $username . ')</a>';
