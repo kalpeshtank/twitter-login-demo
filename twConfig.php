@@ -12,4 +12,4 @@ include_once 'lib/twitteroauth.php';
  */
 $consumerKey = 'zbXkj1fzewIEyMKM9XnzSsQSp';
 $consumerSecret = 'k9Co61h4cDPamCHkMG5fQSY9o2SYYMIcBqXWw86Cdl2M5z1TlG';
-$redirectURL = 'http://localhost/twitter-login-demo-git/';
+$redirectURL = 'http://localhost/tweeter-login/';

@@ -65,9 +65,7 @@ if (isset($_SESSION['status']) && $_SESSION['status'] == 'verified' && !empty($_
     $output_user_detail .= '<div class="row overview">';
     $output_user_detail .= '<div id="wowslider-container1"><div class="ws_images"><ul>';
     foreach ($myTweets as $tweet) {
-//        echo '<pre>';
-//        print_r($tweet);profile_banner_url
-        $output_user_detail .= '<li><img class="row coralbg white"  src="' . $tweet['user']['profile_banner_url'] . '" alt="' . $tweet['text'] . '" title="' . $tweet['text'] . '"/>' . $tweet['created_at'] . '</li>';
+        $output_user_detail .= '<li><img class="row coralbg white"  src="images/bg.jpg" alt="' . $tweet['text'] . '" title="' . $tweet['text'] . '"/>' . $tweet['created_at'] . '</li>';
     }
     $output_user_detail .= '</ul></div></div>';
     $output_user_detail .= '</div></div>';
